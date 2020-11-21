@@ -6,25 +6,65 @@
 /*   By: jchristi <jchristi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 15:05:44 by jchristi          #+#    #+#             */
-/*   Updated: 2020/11/21 19:41:59 by jchristi         ###   ########.fr       */
+/*   Updated: 2020/11/21 21:21:37 by jchristi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strcpy(char *dst, const char *src)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int		i;
+	char	*sub;
+	size_t	i;
+	size_t	l;
 
 	i = 0;
-	while (src[i])
-	{
-		dst[i] = src[i];
-		i += 1;
-	}
-	dst[i] = '\0';
-	return (dst);
+	if (!s1 || !s2)
+		return (NULL);
+	l = ft_strlen(s1) + ft_strlen(s2) + 1;
+	if (!(sub = (char*)ft_calloc((l), sizeof(char))))
+		return (NULL);
+	while (*s1)
+		sub[i++] = *s1++;
+	while (*s2)
+		sub[i++] = *s2++;
+	sub[i] = '\0';
+	return (sub);
 }
+
+char	*ft_strchr(const char *str, int ch)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ch)
+			return ((char *)str + i);
+		i++;
+	}
+	if (str[i] == ch)
+		return ((char *)str + i);
+	return (0);
+}
+
+
+char	*ft_strdup(const char *str)
+{
+	char *a;
+	char *b;
+
+	if (!(a = (char*)malloc((ft_strlen(str) + 1) * sizeof(char))))
+		return (NULL);
+	b = a;
+	while (*str)
+	{
+		*a++ = *str++;
+	}
+	*a = '\0';
+	return (b);
+}
+
 
 static char	*ft_strnew(size_t size)
 {
@@ -73,12 +113,14 @@ char *check_part_of_buf(char *part_of_buf, char **line)
 
 int	get_next_line(int fd, char **line)
 {
-	char		buf[BUFFER_SIZE+1];
+	char		buf[BUFFER_SIZE + 1];
 	int			num_of_read;
 	char		*p_to_n;
 	static char	*part_of_buf;
 	char		*tmp_for_leaks;
 
+	if ((fd == -1) || !(*line) || BUFFER_SIZE <= 0)
+		return (-1);
 	p_to_n = check_part_of_buf(part_of_buf, line);
 	while (!p_to_n && (num_of_read = read(fd, buf, BUFFER_SIZE)))
 	{
@@ -96,6 +138,7 @@ int	get_next_line(int fd, char **line)
 	return(num_of_read || ft_strlen(part_of_buf) || ft_strlen(*line)) ? 1 : 0;
 }
 
+
 int	main(void)
 {
 	char *line;
@@ -110,4 +153,5 @@ int	main(void)
 
 	//get_next_line(fd, &line);
 	//printf("%s\n", line);
+	return (0);
 }
