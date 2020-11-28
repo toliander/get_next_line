@@ -1,0 +1,17 @@
+
+int    main(void)
+{
+    char *line;
+    int fd;
+
+    fd = open("text.txt", O_RDONLY);
+    while(get_next_line(fd, &line))
+        printf("%s\n", line);
+    
+    //get_next_line(fd, &line);
+    //printf("%s\n", line);
+
+    //get_next_line(fd, &line);
+    //printf("%s\n", line);
+    return (0);
+}
